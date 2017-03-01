@@ -1,0 +1,2 @@
+model_checkpoint_path: "model_lenet.ckpt"
+all_model_checkpoint_paths: "model_lenet.ckpt"
