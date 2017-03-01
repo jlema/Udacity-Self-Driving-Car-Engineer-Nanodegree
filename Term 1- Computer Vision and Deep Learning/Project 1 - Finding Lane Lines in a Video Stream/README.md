@@ -51,15 +51,9 @@ print('This image is:', type(image), 'with dimensions:', image.shape)
 plt.imshow(image)  #call as plt.imshow(gray, cmap='gray') to show a grayscaled image
 ```
 
+
     This image is: <class 'numpy.ndarray'> with dimensions: (540, 960, 3)
-
-
-
-
-
     <matplotlib.image.AxesImage at 0x23a807c3eb8>
-
-
 
 
 ![png](README_images/output_3_2.png)
@@ -377,14 +371,7 @@ HTML("""
 ```
 
 
-
-
-
-<video width="960" height="540" controls>
-  <source src="white.mp4">
-</video>
-
-
+[![solid white lane on the right](http://img.youtube.com/vi/KGhDatB2-mM/0.jpg)](http://www.youtube.com/watch?v=KGhDatB2-mM "solid white lane on the right")
 
 
 **At this point, if you were successful you probably have the Hough line segments drawn onto the road, but what about identifying the full extent of the lane and marking it clearly as in the example video (P1_example.mp4)?  Think about defining a line to run the full length of the visible lane based on the line segments you identified with the Hough Transform.  Modify your draw_lines function accordingly and try re-running your pipeline.**
@@ -422,14 +409,7 @@ HTML("""
 ```
 
 
-
-
-
-<video width="960" height="540" controls>
-  <source src="yellow.mp4">
-</video>
-
-
+[![solid yellow lane on the left](http://img.youtube.com/vi/b5S8Rh1rShY/0.jpg)](http://www.youtube.com/watch?v=b5S8Rh1rShY "solid yellow lane on the left")
 
 
 ## Reflections
@@ -490,15 +470,7 @@ HTML("""
 ```
 
 
-
-
-
-<video width="960" height="540" controls>
-  <source src="extra.mp4">
-</video>
-
-
-
+[![optional challenge](http://img.youtube.com/vi/ldmAnr9jTug/0.jpg)](http://www.youtube.com/watch?v=ldmAnr9jTug "optional challenge")
 
 
 ```python
