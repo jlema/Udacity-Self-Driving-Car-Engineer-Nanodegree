@@ -1,0 +1,86 @@
+Initialize engine version: 5.4.2f2 (b7e030c65c9b)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 1080 (ID=0x1b80)
+    Vendor:   NVIDIA
+    VRAM:     8105 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\Assembly-UnityScript.dll (this message is harmless)
+Loading C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\Assembly-UnityScript.dll into Unity Child Domain
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\UnityEngine.CloudBuild.dll (this message is harmless)
+Loading C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\UnityEngine.CloudBuild.dll into Unity Child Domain
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\UniFileBrowser.dll (this message is harmless)
+Loading C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\UniFileBrowser.dll into Unity Child Domain
+- Completed reload, in  0.041 seconds
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\System.dll (this message is harmless)
+OnLevelWasLoaded was found on ReturnToMainMenu
+This message has been deprecated and will be removed in a later version of Unity.
+Add a delegate to SceneManager.sceneLoaded instead to get notifications after scene loading has completed
+ 
+(Filename:  Line: 375)
+
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\Mono.Security.dll (this message is harmless)
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\Boo.Lang.dll (this message is harmless)
+desktop: 1920x1080 60Hz; virtual: 3840x1082 at 0,-2
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 0.695389 ms
+Setting up 3 worker threads for Enlighten.
+  Thread -> id: 50c4 -> priority: 1 
+  Thread -> id: 2038 -> priority: 1 
+  Thread -> id: 2c4c -> priority: 1 
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 2.775971 ms
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 419.
+Total: 0.154841 ms (FindLiveObjects: 0.012101 ms CreateObjectMapping: 0.007136 ms MarkObjects: 0.118225 ms  DeleteObjects: 0.017066 ms)
+
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 2.021003 ms
+
+Unloading 21 unused Assets to reduce memory usage. Loaded Objects now: 1465.
+Total: 0.595471 ms (FindLiveObjects: 0.055544 ms CreateObjectMapping: 0.021410 ms MarkObjects: 0.241415 ms  DeleteObjects: 0.276790 ms)
+
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\System.Configuration.dll (this message is harmless)
+Platform assembly: C:\Temp\Project 3 - Behavioral Cloning\Default Windows desktop 64-bit_Data\Managed\System.Xml.dll (this message is harmless)
+2/28/2017 11:26:50 PM|Fatal|WebSocket.acceptException|System.Net.Sockets.SocketException: No connection could be made because the target machine actively refused it.
+                            
+                              at System.Net.Sockets.Socket.Connect (System.Net.EndPoint remoteEP, Boolean requireSocketPolicy) [0x00000] in <filename unknown>:0 
+                              at System.Net.Sockets.Socket.Connect (System.Net.EndPoint remoteEP) [0x00000] in <filename unknown>:0 
+                              at System.Net.Sockets.TcpClient.Connect (System.Net.IPEndPoint remote_end_point) [0x00000] in <filename unknown>:0 
+                              at System.Net.Sockets.TcpClient.Connect (System.Net.IPAddress[] ipAddresses, Int32 port) [0x00000] in <filename unknown>:0 
+2/28/2017 11:26:50 PM|Error|WebSocket.Send|The WebSocket connection has already been closed.
+2/28/2017 11:26:50 PM|Error|WebSocket.Close|The WebSocket connection has already been closed.
+2/28/2017 11:26:51 PM|Fatal|WebSocket.acceptException|System.Net.Sockets.SocketException: No connection could be made because the target machine actively refused it.
+                            
+                              at System.Net.Sockets.Socket.Connect (System.Net.EndPoint remoteEP, Boolean requireSocketPolicy) [0x00000] in <filename unknown>:0 
+                              at System.Net.Sockets.Socket.Connect (System.Net.EndPoint remoteEP) [0x00000] in <filename unknown>:0 
+                              at System.Net.Sockets.TcpClient.Connect (System.Net.IPEndPoint remote_end_point) [0x00000] in <filename unknown>:0 
+                              at System.Net.Sockets.TcpClient.Connect (System.Net.IPAddress[] ipAddresses, Int32 port) [0x00000] in <filename unknown>:0 
+2/28/2017 11:26:52 PM|Fatal|WebSocket.acceptException|System.Net.Sockets.SocketException: No connection could be made because the target machine actively refused it.
+                            
+                              at System.Net.Sockets.Socket.Connect (System.Net.EndPoint remoteEP, Boolean requireSocketPolicy) [0x00000] in <filename unknown>:0 
+                              at System.Net.Sockets.Socket.Connect (System.Net.EndPoint remoteEP) [0x00000] in <filename unknown>:0 
+                              at System.Net.Sockets.TcpClient.Connect (System.Net.IPEndPoint remote_end_point) [0x00000] in <filename unknown>:0 
+                              at System.Net.Sockets.TcpClient.Connect (System.Net.IPAddress[] ipAddresses, Int32 port) [0x00000] in <filename unknown>:0 
+2/28/2017 11:26:53 PM|Fatal|WebSocket.acceptException|System.Net.Sockets.SocketException: No connection could be made because the target machine actively refused it.
+                            
+                              at System.Net.Sockets.Socket.Connect (System.Net.EndPoint remoteEP, Boolean requireSocketPolicy) [0x00000] in <filename unknown>:0 
+                              at System.Net.Sockets.Socket.Connect (System.Net.EndPoint remoteEP) [0x00000] in <filename unknown>:0 
+                              at System.Net.Sockets.TcpClient.Connect (System.Net.IPEndPoint remote_end_point) [0x00000] in <filename unknown>:0 
+                              at System.Net.Sockets.TcpClient.Connect (System.Net.IPAddress[] ipAddresses, Int32 port) [0x00000] in <filename unknown>:0 
+2/28/2017 11:26:54 PM|Error|WebSocket.Send|The WebSocket connection has already been closed.
+2/28/2017 11:26:54 PM|Error|WebSocket.Send|The WebSocket connection has already been closed.
