@@ -53,10 +53,6 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   if (fabs(px) >= epsilon)
   {
     phi = atan2(py, px);
-    while (!((phi >= -M_PI) && (phi <= M_PI)))
-    {
-      phi += 2 * M_PI;
-    }
   }
 
   if (fabs(rho) >= epsilon)
@@ -71,6 +67,11 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   MatrixXd Ht = H_.transpose();
 
   VectorXd y = z - Hx;
+  // Normalize phi in y
+  while (!((y[1] >= -M_PI) && (y[1] <= M_PI)))
+  {
+    y[1] -= 2 * M_PI; //doing += would hang the program after a few lines of output
+  }
   MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd K = P_ * Ht * S.inverse();
 

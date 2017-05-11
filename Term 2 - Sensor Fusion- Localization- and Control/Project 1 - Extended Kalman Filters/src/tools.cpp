@@ -49,16 +49,13 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   const double py_2 = pow(py, 2);
   const double sqrt_px_2_py_2 = sqrt(px_2 + py_2);
   const double pow_3_sqrt_px_2_py_2 = pow(sqrt_px_2_py_2, 3);
+  const double epsilon = 0.0001;
+  const double c1 = std::max(epsilon, px_2 + py_2);
 
-  //check division by zero
-  if (fabs(px_2 + py_2) < 0.0001) {
-    std::cout << "CalculateJacobian () - Error - Division by Zero" << std::endl;
-  }
-  else {
-    //compute the Jacobian matrix
-    Hj << px / sqrt_px_2_py_2, py / sqrt_px_2_py_2, 0, 0,
-          -py / (px_2 + py_2), px / (px_2 + py_2), 0, 0,
-          (py * (vx * py - vy * px)) / pow_3_sqrt_px_2_py_2, (px * (vy * px - vx * py)) / pow_3_sqrt_px_2_py_2, px / sqrt_px_2_py_2, py / sqrt_px_2_py_2;
-  }
+  //compute the Jacobian matrix
+  Hj << px / sqrt_px_2_py_2, py / sqrt_px_2_py_2, 0, 0,
+        -py / c1, px / c1, 0, 0,
+        (py * (vx * py - vy * px)) / pow_3_sqrt_px_2_py_2, (px * (vy * px - vx * py)) / pow_3_sqrt_px_2_py_2, px / sqrt_px_2_py_2, py / sqrt_px_2_py_2;
+  
   return Hj;
 }

@@ -79,8 +79,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       */
       const double rho = measurement_pack.raw_measurements_[0];
       const double phi = measurement_pack.raw_measurements_[1];
-      //set the state with the initial location and zero velocity
-      ekf_.x_ << rho * cos(phi), rho * sin(phi), 0, 0;
+      const double rhodot = measurement_pack.raw_measurements_[2];
+      //set the state with the initial location and velocity
+      ekf_.x_ << rho * cos(phi), rho * sin(phi), rhodot * cos(phi), rhodot * sin(phi);
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       /**
@@ -109,12 +110,12 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   float noise_ay = 9.0;
 
   //compute the time elapsed between the current and previous measurements
-  double dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0;	//dt - expressed in seconds
+  const double dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0;	//dt - expressed in seconds
   previous_timestamp_ = measurement_pack.timestamp_;
 
-  double dt_2 = dt * dt;
-  double dt_3 = dt_2 * dt;
-  double dt_4 = dt_3 * dt;
+  const double dt_2 = dt * dt;
+  const double dt_3 = dt_2 * dt;
+  const double dt_4 = dt_3 * dt;
 
   //Modify the F matrix so that the time is integrated
   ekf_.F_(0, 2) = dt;
