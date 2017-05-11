@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src"
   ],
-  "SelectedNode": "\\src",
+  "SelectedNode": "\\src\\kalman_filter.cpp",
   "PreviewInSolutionExplorer": false
 }
