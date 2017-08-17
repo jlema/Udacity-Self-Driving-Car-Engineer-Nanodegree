@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "iosfwd": "cpp",
+        "xlocbuf": "cpp",
+        "iostream": "cpp",
+        "cmath": "cpp",
+        "vector": "cpp",
+        "xlocale": "cpp",
+        "xlocmon": "cpp",
+        "complex": "cpp",
+        "xcomplex": "cpp"
+    }
+}

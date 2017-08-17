@@ -76,38 +76,15 @@ public:
   // Delta timestamp
   long long delta_t_;
 
-  // Augmented state vector
-  VectorXd x_aug_;
-
-  // Augmented covariance matrix
-  MatrixXd P_aug_;
-
-  // create sigma point matrix
-  MatrixXd Xsig_aug_;
-
-  // predicted state vector: [pos1 pos2 vel_abs yaw_angle yaw_rate] in SI units and rad
-  // VectorXd x_pred_;
-
-  // predicted state covariance matrix
-  // MatrixXd P_pred_;
-
-  // radar measurement dimension, radar can measure r, phi, and r_dot
-  int n_z_;
-
-  // predicted radar sigma points
-  MatrixXd Zsig_pred_;
-
-  // predicted radar measurement mean
-  VectorXd z_pred_;
-
-  // predicted radar measurement covariance matrix
-  MatrixXd S;
-
   // R and H for Lidar update
-  MatrixXd R_;
-  MatrixXd H_;
+  MatrixXd R_Lidar;
+  MatrixXd H_Lidar;
 
-  // TODO: Add NIS
+  // R and H for Radar update
+  MatrixXd R_Radar;
+  MatrixXd H_Radar;
+
+  // NIS
   double NIS_laser_;
   double NIS_radar_;
 
