@@ -74,7 +74,7 @@ public:
   long long previous_t_;
 
   // Delta timestamp
-  long long delta_t_;
+  double delta_t_;
 
   // R and H for Lidar update
   MatrixXd R_Lidar;
