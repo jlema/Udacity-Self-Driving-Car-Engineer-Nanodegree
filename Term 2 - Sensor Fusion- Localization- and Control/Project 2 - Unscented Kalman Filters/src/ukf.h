@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include "tools.h"
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -74,7 +75,7 @@ public:
   long long previous_t_;
 
   // Delta timestamp
-  double delta_t_;
+  double delta_t_; // this was long long which made Prediction() always being called with a time step of 0
 
   // R and H for Lidar update
   MatrixXd R_Lidar;
@@ -87,6 +88,9 @@ public:
   // NIS
   double NIS_laser_;
   double NIS_radar_;
+
+  //used to normalize angles later
+  Tools tools;
 
   /**
    * Constructor

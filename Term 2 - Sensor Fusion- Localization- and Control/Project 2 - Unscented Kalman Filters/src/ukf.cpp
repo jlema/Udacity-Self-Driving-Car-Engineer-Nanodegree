@@ -30,10 +30,10 @@ UKF::UKF()
   P_ = MatrixXd::Zero(n_x_, n_x_);
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 2; // TODO: was 1.8
+  std_a_ = 2;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = M_PI / 10; // TODO: was 0.7
+  std_yawdd_ = M_PI / 10;
 
   // Augmented state dimension
   n_aug_ = 7;
@@ -46,6 +46,9 @@ UKF::UKF()
 
   //create matrix with predicted sigma points as columns
   Xsig_pred_ = MatrixXd::Zero(n_x_, n_sig_);
+
+  //used to normalize angles later
+  Tools tools;
 }
 
 UKF::~UKF() {}
@@ -70,18 +73,18 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
       */
       float px = meas_package.raw_measurements_[0];
       float py = meas_package.raw_measurements_[1];
+      //avoiding initializing with nonsense data
+      if (fabs(px) <= 0.001 && fabs(py) <= 0.001)
+      {
+        px = 0.001;
+        py = 0.001;
+      }
       //set the state with the initial location and velocity
-      x_ << px, // TODO:
+      x_ << px,
           py,
           0,
-          M_PI / 10,
-          M_PI / 6;
-
-      P_ << (std_laspx_ * std_laspx_), 0, 0, 0, 0, // TODO:
-          0, (std_laspy_ * std_laspy_), 0, 0, 0,
-          0, 0, 16.0, 0, 0,
-          0, 0, 0, 1, 0,
-          0, 0, 0, 0, 1;
+          0,
+          0;
     }
     else if (meas_package.sensor_type_ == MeasurementPackage::RADAR)
     {
@@ -90,20 +93,24 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
       */
       float ro = meas_package.raw_measurements_[0];
       float theta = meas_package.raw_measurements_[1];
+      //avoiding initializing with nonsense data
+      if (fabs(ro) <= 0.001)
+      {
+        ro = 0.001;
+      }
       //set the state with the initial location and velocity
-      theta = fmod(theta, 2 * M_PI); // TODO:
-      x_ << ro * cos(theta),         // TODO:
+      x_ << ro * cos(theta),
           ro * sin(theta),
-          4.0,
-          M_PI / 6,
-          M_PI / 10;
-
-      P_ << 1, 0, 0, 0, 0, // TODO:
-          0, 1, 0, 0, 0,
-          0, 0, 16.0, 0, 0,
-          0, 0, 0, (M_PI * M_PI / 36), 0,
-          0, 0, 0, 0, (M_PI * M_PI / 49);
+          0,
+          0,
+          0;
     }
+
+    P_ << 1, 0, 0, 0, 0,
+        0, 1, 0, 0, 0,
+        0, 0, 1, 0, 0,
+        0, 0, 0, 1, 0,
+        0, 0, 0, 0, 1;
 
     // R and H for Lidar update
     R_Lidar = MatrixXd::Zero(2, 2);
@@ -143,6 +150,13 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
   //***
 
   delta_t_ = (meas_package.timestamp_ - previous_t_) / 1000000.0;
+  //avoid numerical instability during the prediction
+  while (delta_t_ > 0.2)
+  {
+    double step = 0.1;
+    Prediction(step);
+    delta_t_ -= step;
+  }
   Prediction(delta_t_);
   if ((meas_package.sensor_type_ == MeasurementPackage::LASER) && use_laser_)
   {
@@ -202,7 +216,6 @@ void UKF::Prediction(double delta_t)
     double p_y = Xsig_aug_(1, i);
     double v = Xsig_aug_(2, i);
     double yaw = Xsig_aug_(3, i);
-    // yaw = fmod(yaw, 2*M_PI); // TODO:
     double yawd = Xsig_aug_(4, i);
     double nu_a = Xsig_aug_(5, i);
     double nu_yawdd = Xsig_aug_(6, i);
@@ -260,11 +273,7 @@ void UKF::Prediction(double delta_t)
     // state difference
     VectorXd x_diff = Xsig_pred_.col(i) - x_;
     //angle normalization
-    while (x_diff(3) > M_PI)
-      x_diff(3) -= 2. * M_PI;
-    while (x_diff(3) < -M_PI)
-      x_diff(3) += 2. * M_PI;
-
+    x_diff(3) = tools.NormalizeAngle(x_diff(3));
     P_ = P_ + weights_(i) * x_diff * x_diff.transpose();
   }
 
@@ -367,15 +376,20 @@ void UKF::UpdateRadar(MeasurementPackage meas_package)
     double p_y = Xsig_pred_(1, i);
     double v = Xsig_pred_(2, i);
     double yaw = Xsig_pred_(3, i);
-    yaw = fmod(yaw, 2 * M_PI); // TODO:
 
     double v1 = cos(yaw) * v;
     double v2 = sin(yaw) * v;
 
     // measurement model
+    // safety for divide by zero and undefined atan2(0,0)
+    if ((fabs(p_x) <= 0.001) && (fabs(p_x) <= 0.001))
+    {
+      p_x = 0.001;
+      p_y = 0.001;
+    }
+
     double r = sqrt(p_x * p_x + p_y * p_y);
     double phi = atan2(p_y, p_x);
-    phi = fmod(phi, 2 * M_PI); // TODO:
     double r_dot = (p_x * v1 + p_y * v2) / r;
 
     Zsig_pred_(0, i) = r;
@@ -390,7 +404,6 @@ void UKF::UpdateRadar(MeasurementPackage meas_package)
   {
     z_pred_ = z_pred_ + weights_(i) * Zsig_pred_.col(i);
   }
-  z_pred_(1) = fmod(z_pred_(1), 2 * M_PI); // TODO:
 
   // predicted radar measurement covariance matrix
   MatrixXd S = MatrixXd::Zero(n_z_, n_z_);
@@ -400,11 +413,7 @@ void UKF::UpdateRadar(MeasurementPackage meas_package)
     VectorXd z_diff = Zsig_pred_.col(i) - z_pred_;
 
     //angle normalization
-    while (z_diff(1) > M_PI)
-      z_diff(1) -= 2. * M_PI;
-    while (z_diff(1) < -M_PI)
-      z_diff(1) += 2. * M_PI;
-
+    z_diff(1) = tools.NormalizeAngle(z_diff(1));
     S = S + weights_(i) * z_diff * z_diff.transpose();
   }
 
@@ -424,18 +433,11 @@ void UKF::UpdateRadar(MeasurementPackage meas_package)
     //residual
     VectorXd z_diff = Zsig_pred_.col(i) - z_pred_;
     //angle normalization
-    while (z_diff(1) > M_PI)
-      z_diff(1) -= 2. * M_PI;
-    while (z_diff(1) < -M_PI)
-      z_diff(1) += 2. * M_PI;
-
+    z_diff(1) = tools.NormalizeAngle(z_diff(1));
     // state difference
     VectorXd x_diff = Xsig_pred_.col(i) - x_;
     //angle normalization
-    while (x_diff(3) > M_PI)
-      x_diff(3) -= 2. * M_PI;
-    while (x_diff(3) < -M_PI)
-      x_diff(3) += 2. * M_PI;
+    x_diff(3) = tools.NormalizeAngle(x_diff(3));
 
     Tc = Tc + weights_(i) * x_diff * z_diff.transpose();
   }
@@ -447,10 +449,7 @@ void UKF::UpdateRadar(MeasurementPackage meas_package)
   VectorXd z_diff = meas_package.raw_measurements_ - z_pred_;
 
   //angle normalization
-  while (z_diff(1) > M_PI)
-    z_diff(1) -= 2. * M_PI;
-  while (z_diff(1) < -M_PI)
-    z_diff(1) += 2. * M_PI;
+  z_diff(1) = tools.NormalizeAngle(z_diff(1));
 
   //update state mean and covariance matrix
   x_ = x_ + K * z_diff;

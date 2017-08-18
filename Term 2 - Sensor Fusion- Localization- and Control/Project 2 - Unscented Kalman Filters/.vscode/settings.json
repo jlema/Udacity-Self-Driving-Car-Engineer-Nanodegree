@@ -8,6 +8,7 @@
         "xlocale": "cpp",
         "xlocmon": "cpp",
         "complex": "cpp",
-        "xcomplex": "cpp"
+        "xcomplex": "cpp",
+        "geometry": "cpp"
     }
 }

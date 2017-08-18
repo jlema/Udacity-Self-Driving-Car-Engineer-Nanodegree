@@ -7,7 +7,8 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using namespace std;
 
-class Tools {
+class Tools
+{
 public:
   /**
   * Constructor.
@@ -24,6 +25,10 @@ public:
   */
   VectorXd CalculateRMSE(const vector<VectorXd> &estimations, const vector<VectorXd> &ground_truth);
 
+  /**
+  * A helper method to normalize angles
+  */
+  double NormalizeAngle(double x);
 };
 
 #endif /* TOOLS_H_ */
