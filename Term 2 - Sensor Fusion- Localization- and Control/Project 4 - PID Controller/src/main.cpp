@@ -44,9 +44,17 @@ int main(int argc, char *argv[])
   // 5: dP for Kp
   // 6: dP for Ki
   // 7: dP for Kd
-  pid.Init(atof(argv[1]), atof(argv[2]), atof(argv[3]), atoi(argv[4]), atof(argv[5]), atof(argv[6]), atof(argv[7]));
+
   // int count = 0;
   bool twiddleParameters = false; // set to false to skip twiddle process
+  if (twiddleParameters)
+  {
+    pid.Init(atof(argv[1]), atof(argv[2]), atof(argv[3]), atoi(argv[4]), atof(argv[5]), atof(argv[6]), atof(argv[7]));
+  }
+  else
+  {
+    pid.Init(0.26381, 0.0003, 11.2702, 3000, 0.05, 0.0001, 0.05);
+  }
 
   h.onMessage([&pid /*, &count*/, &twiddleParameters, &argv](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.

@@ -34,63 +34,37 @@ There's an experimental patch for windows in this [PR](https://github.com/udacit
 2. Make a build directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
 4. Run it: `./pid`. 
+5. If you want to use specific parameters, you can run it using command line arguments, e.g.
+    
+    `./pid 0.26381 0.0003 11.2702 3000 0.05 0.0001 0.05`
+    
+    The values are in the following order: **Kp, Ki, Kd, max twiddle steps, change in Kp, change in Ki, change in Kd.**
 
-## Editor Settings
+## Effect of P, I, D components on implementation
 
-We've purposefully kept editor configuration files out of this repo in order to
-keep it as simple and environment agnostic as possible. However, we recommend
-using the following settings:
+This is my understanding of how the P, I and D parameters affect the driving behaviour of the car.
+* P - This is the main parameter that influences steering angle recovery. Increasing this value increased oscillations therefore a low value would provide a smooth driving experience.
+* I - Even very small changes in the Ki parameter would influence the steering angle greatly as its error is the accumulation of all previous CTE errors. We could use this as a systemic bias (e.g. wheels aligned left or right.)
+* D - This parameter helps reduce oscillations as it is derived by comparing the previous and current CTE. Higher Kd values would reduce sudden steering.
 
-* indent using spaces
-* set tab width to 2 spaces (keeps the matrices in source code aligned)
+## Determination of PID values
 
-## Code Style
+I implemented Twiddle to tune the Kp, Kd and Ki parameters. My strategy was to start with 0, 0, 0 for these values and a low value for dP (0.5) then run many Twiddle loops of 1000 iterations each and monitor the parameters until they seem to reach a local maximum (i.e. go back and forth to the same values for several iterations.)
+Once the parameters seem to reach their local maxima I would increase the number of iterations per Twiddle loop by 500 and monitor the process again until the next maxima is reached. I had to repeat this process 5 times to reach a good convergence value for Kp and Kd.
 
-Please (do your best to) stick to [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html).
+In order to make this process easier, I enabled the use of command line arguments for the different parameters (i.e. Kp, Ki, Kd, total Twiddle iterations and dP.) 
 
-## Project Instructions and Rubric
+Ki proved a bit more problematic as any high value would cause the car to veer off the road, so once Kp and Kd got to acceptable values I manually tested for Ki values until I reached a value that worked. 
 
-Note: regardless of the changes you make, your project must be buildable using
-cmake and make!
+### Final PID Values
 
-More information is only accessible by people who are already enrolled in Term 2
-of CarND. If you are enrolled, see [the project page](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/f1820894-8322-4bb3-81aa-b26b3c6dcbaf/lessons/e8235395-22dd-4b87-88e0-d108c5e5bbf4/concepts/6a4d8d42-6a04-4aa6-b284-1697c0fd6562)
-for instructions and the project rubric.
+As mentioned above, after running Twiddle for 5 'epochs' I reached the following values:
+* Kp is **0.26381**
+* Ki is **0.0003**
+* Kd is **11.2702**
 
-## Hints!
+## Video of the simulator using the Final PID Values
 
-* You don't have to follow this directory structure, but if you do, your work
-  will span all of the .cpp files here. Keep an eye out for TODOs.
+This is a video of the simulator successfully completing 2 full laps using the PID values above: https://youtu.be/g_t3M0Yw17U
 
-## Call for IDE Profiles Pull Requests
-
-Help your fellow students!
-
-We decided to create Makefiles with cmake to keep this project as platform
-agnostic as possible. Similarly, we omitted IDE profiles in order to we ensure
-that students don't feel pressured to use one IDE or another.
-
-However! I'd love to help people get up and running with their IDEs of choice.
-If you've created a profile for an IDE that you think other students would
-appreciate, we'd love to have you add the requisite profile files and
-instructions to ide_profiles/. For example if you wanted to add a VS Code
-profile, you'd add:
-
-* /ide_profiles/vscode/.vscode
-* /ide_profiles/vscode/README.md
-
-The README should explain what the profile does, how to take advantage of it,
-and how to install it.
-
-Frankly, I've never been involved in a project with multiple IDE profiles
-before. I believe the best way to handle this would be to keep them out of the
-repo root to avoid clutter. My expectation is that most profiles will include
-instructions to copy files to a new location to get picked up by the IDE, but
-that's just a guess.
-
-One last note here: regardless of the IDE used, every submitted project must
-still be compilable with cmake and make./
-
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
-
+[![Alt text](/thumb.jpg)](http://www.youtube.com/watch?v=g_t3M0Yw17U)
