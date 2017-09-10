@@ -40,6 +40,10 @@ There's an experimental patch for windows in this [PR](https://github.com/udacit
     
     The values are in the following order: **Kp, Ki, Kd, max twiddle steps, change in Kp, change in Ki, change in Kd.**
 
+6. Please note that **Twiddle is disabled by default**, and can be enabled again by changing line 49 in `main.cpp` to:
+    
+    `bool twiddleParameters = true;`
+
 ## Effect of P, I, D components on implementation
 
 This is my understanding of how the P, I and D parameters affect the driving behaviour of the car.
