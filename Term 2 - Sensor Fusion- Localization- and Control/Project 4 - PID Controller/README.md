@@ -56,7 +56,13 @@ This is my understanding of how the P, I and D parameters affect the driving beh
 I implemented Twiddle to tune the Kp, Kd and Ki parameters. My strategy was to start with 0, 0, 0 for these values and a low value for dP (0.5) then run many Twiddle loops of 1000 iterations each and monitor the parameters until they seem to reach a local maximum (i.e. go back and forth to the same values for several iterations.)
 Once the parameters seem to reach their local maxima I would increase the number of iterations per Twiddle loop by 500 and monitor the process again until the next maxima is reached. I had to repeat this process 5 times to reach a good convergence value for Kp and Kd.
 
-In order to make this process easier, I enabled the use of command line arguments for the different parameters (i.e. Kp, Ki, Kd, total Twiddle iterations and dP.) 
+In order to make this process easier, I enabled the use of command line arguments for the different parameters (i.e. Kp, Ki, Kd, total Twiddle iterations and dP.) Below are the values at the end of each Twiddle 'epoch'. `n` represents the number of iterations per Twiddle loop:
+
+* n: 1000, Kp = 2.00726, Ki: 0, Kd: 6.90764, Error: 0.0847437, Sum dP: 1.59458
+* n: 1500, Kp = 0.81881, Ki: 0, Kd: 9.96019, Error: 0.0770463, Sum dP: 1.58341
+* n: 2000, Kp = 0.81381, Ki: 0, Kd: 10.4602, Error: 0.0783979, Sum dP: 1.17005
+* n: 2500, Kp = 0.26381, Ki: 0, Kd: 10.4602, Error: 8.34134, Sum dP: 0.850621
+* n: 3000, Kp = 0.26381, Ki: 0, Kd: 11.2702, Error: 0.184588, Sum dP: 1.43551
 
 Ki proved a bit more problematic as any high value would cause the car to veer off the road, so once Kp and Kd got to acceptable values I manually tested for Ki values until I reached a value that worked. 
 
