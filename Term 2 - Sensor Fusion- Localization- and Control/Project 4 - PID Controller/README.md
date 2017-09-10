@@ -77,4 +77,4 @@ As mentioned above, after running Twiddle for 5 'epochs' I reached the following
 
 This is a video of the simulator successfully completing 2 full laps using the PID values above: https://youtu.be/g_t3M0Yw17U
 
-[![Alt text](/thumb.jpg)](http://www.youtube.com/watch?v=g_t3M0Yw17U)
+[![Project Video](https://raw.githubusercontent.com/jlema/Udacity-Self-Driving-Car-Engineer-Nanodegree/master/Term%202%20-%20Sensor%20Fusion-%20Localization-%20and%20Control/Project%204%20-%20PID%20Controller/thumb.JPG)](http://www.youtube.com/watch?v=g_t3M0Yw17U)
