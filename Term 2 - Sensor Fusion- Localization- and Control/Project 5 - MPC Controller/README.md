@@ -48,17 +48,32 @@ Other values tried:
 Higher N values would create unpredictability in the driving reactions which would end in the car driving off the road. Lower or higher values of dt did not seem to work well with the required latency of 100 ms. Because the actuators only trigger after 100 ms we need to ensure the actuator inputs are calculated at the right time.
 
 ## Polynomial Fitting and MPC Preprocessing
-(see [main.cpp](src/main.cpp) lines 112-121) The original reference trajectory markers are defined in the global coordinate system of the simlulator. During pre-processing we shift these values to the car coordinate system, making px, py and psi all zero.
+(see [main.cpp](src/main.cpp) lines 114-123) The original reference trajectory markers are defined in the global coordinate system of the simulator. During pre-processing we shift these values to the car coordinate system, making px, py and psi all zero.
 
 (see [main.cpp](src/main.cpp) lines 125-127) The reference trajectory markers' x and y coordinates are used to fit a 3rd degree polynomial whose coefficients together with the car state vector are passed to the MPC solver which returns the predicted **steering angle**, **acceleration** and x and y coordinates.
 
 ## Model Predictive Control with Latency
-The 100 milisecond latency requirement was accomplished by experimenting with different timestep length and elapsed duration values as described above.
+The 100 milisecond latency requirement was accomplished by predicting the vehicle state 100ms in the future, before passing the state to the MPC solver. This was done by using the [update and error equations](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/f1820894-8322-4bb3-81aa-b26b3c6dcbaf/lessons/338b458f-7ebf-449c-9ad1-611eb933b076/concepts/d26b8460-653f-4479-bc24-68bb62c146ba) considering px, py and psi zero after the coordinate system is shifted from global to car coordinates (see [main.cpp](src/main.cpp) lines 130-137). These changes allowed for **a safe increase of +10 mph to the reference velocity to 70 mph**.
+```
+// Calculate state after a latency of 100ms (0.1)
+// To account for actuator latency before sending to MPC solver
+const double latency = 0.1;
+const double Lf = 2.67;
+double l_px = v * latency; // px is zero and psi is zero after shifts above, so this gets reduced to v * latency
+double l_py = 0; // py is zero and psi is zero after shifts above, so this gets reduced to 0
+double l_psi = -v / Lf * delta * latency; // psi is zero after the shifts above, so this gets reduced to -v / Lf * delta * latency
+double l_v = v + a * latency; // velocity increases a bit during the latency period
+double l_epsi = -atan(coeffs[1]); // psi is zero after the shifts above, so this gets reduced to -atan(coeffs[1])
+double l_cte = polyeval(coeffs, 0) + v * sin(l_epsi) * latency; // py is zero after the shifts above, so this gets reduced to polyeval(coeffs, 0) + v * sin(epsi) * latency;
 
+Eigen::VectorXd state(6);
+state << l_px, l_py, l_psi, l_v, l_cte, l_epsi; // updated all state quantities to account for latency
+auto vars = mpc.Solve(state, coeffs);
+```
 ## Video of the simulator using the Final PID Values
-This is a video of the simulator successfully completing 2 full laps using the MPC model described above: https://youtu.be/UjAyQ-ZSBZM
+This is a video of the simulator successfully completing 2 full laps using the MPC model described above: https://youtu.be/WTp6IA1elP4
 
-[![Project Video](https://raw.githubusercontent.com/jlema/Udacity-Self-Driving-Car-Engineer-Nanodegree/master/Term%202%20-%20Sensor%20Fusion-%20Localization-%20and%20Control/Project%205%20-%20MPC%20Controller/thumb.JPG)](https://youtu.be/UjAyQ-ZSBZM)
+[![Project Video](https://raw.githubusercontent.com/jlema/Udacity-Self-Driving-Car-Engineer-Nanodegree/master/Term%202%20-%20Sensor%20Fusion-%20Localization-%20and%20Control/Project%205%20-%20MPC%20Controller/thumb.JPG)](https://youtu.be/WTp6IA1elP4)
 
 ---
 <a id="deps"></a>

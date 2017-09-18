@@ -133,8 +133,8 @@ int main()
           double l_py = 0;                                                // py is zero and psi is zero after shifts above, so this gets reduced to 0
           double l_psi = -v / Lf * delta * latency;                       // psi is zero after the shifts above, so this gets reduced to -v / Lf * delta * latency
           double l_v = v + a * latency;                                   // velocity increases a bit during the latency period
-          double l_epsi = -atan(coeffs[1]);                               // psi is zero after the shifts above, so this gets reduced to -atan(coeffs[1])
-          double l_cte = polyeval(coeffs, 0) + v * sin(l_epsi) * latency; // py is zero after the shifts above, so this gets reduced to polyeval(coeffs, 0) + v * sin(epsi) * latency;
+          double l_epsi = -atan(coeffs[1]) + v / Lf * delta * latency;    // psi is zero after the shifts above, so this gets reduced to -atan(coeffs[1]) + v / Lf * delta * latency
+          double l_cte = polyeval(coeffs, 0) + v * sin(l_epsi) * latency; // py is zero after the shifts above, so this gets reduced to polyeval(coeffs, 0) + v * sin(epsi) * latency
 
           Eigen::VectorXd state(6);
           state << l_px, l_py, l_psi, l_v, l_cte, l_epsi; // updated all state quantities to account for latency
