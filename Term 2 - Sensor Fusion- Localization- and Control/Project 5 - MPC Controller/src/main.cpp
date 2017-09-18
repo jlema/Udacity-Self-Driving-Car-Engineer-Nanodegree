@@ -94,6 +94,7 @@ int main()
       string s = hasData(sdata);
       if (s != "")
       {
+        size_t i = 0;
         auto j = json::parse(s);
         string event = j[0].get<string>();
         if (event == "telemetry")
@@ -108,7 +109,7 @@ int main()
 
           // shift values to car reference
           // NOTE: shifting code referenced from Q&A session
-          for (int i = 0; i < ptsx.size(); i++)
+          for (i = 0; i < ptsx.size(); i++)
           {
             // shift car reference angle to 90 degrees
             // make px and py zero
@@ -123,15 +124,10 @@ int main()
           Eigen::VectorXd ptsy_transform = Eigen::VectorXd::Map(ptsy.data(), ptsy.size());
           auto coeffs = polyfit(ptsx_transform, ptsy_transform, 3);
           double cte = polyeval(coeffs, 0); // In vehicle coordinates cte is the intercept at x = 0 (instead of at x and subtracting y)
-          // double epsi = psi - atan(coeffs[1] + 2 * px * coefffs[2] + 3 * coeffs[3] * pow(px, 2))
-          double epsi = -atan(coeffs[1]); // psi and px are zero after the shifts above
-
-          // get current steering angle and throttle back
-          double steer_value = j[1]["steering_angle"];
-          double throttle_value = j[1]["throttle"]; //throttle != acceleration but it works well enough for our case
+          double epsi = -atan(coeffs[1]);   // psi and px are zero after the shifts above
 
           Eigen::VectorXd state(6);
-          state << /*px, py, psi,*/ 0, 0, 0, v, cte, epsi; // px, py and psi are all zero after shifts above
+          state << 0, 0, 0, v, cte, epsi; // px, py and psi are all zero after shifts above
           auto vars = mpc.Solve(state, coeffs);
 
           //Display the waypoints/reference line
@@ -143,7 +139,7 @@ int main()
           // the points in the simulator are connected by a Yellow line
           double poly_inc = 2.5; // how much distance away is each x coordinate from each other
           int num_points = 25;   // how many points we want to see out in the future
-          for (int i = 1; i < num_points; i++)
+          for (int i = 0; i < num_points; i++)
           {
             next_x_vals.push_back(poly_inc * i);
             next_y_vals.push_back(polyeval(coeffs, poly_inc * i));
@@ -155,7 +151,7 @@ int main()
 
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Green line
-          for (int i = 2; i < vars.size(); i++)
+          for (i = 2; i < vars.size(); i++)
           {
             if (i % 2 == 0) //every even value is an x value, odd is a y value
             {
@@ -167,13 +163,8 @@ int main()
             }
           }
 
-          // This is the length from front to CoG that has a similar radius.
-          const double Lf = 2.67;
-
           json msgJson;
-          // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
-          // Otherwise the values will be in between [-deg2rad(25), deg2rad(25] instead of [-1, 1].
-          msgJson["steering_angle"] = vars[0] / (deg2rad(25) * Lf);
+          msgJson["steering_angle"] = vars[0];
           msgJson["throttle"] = vars[1];
 
           msgJson["next_x"] = next_x_vals;
