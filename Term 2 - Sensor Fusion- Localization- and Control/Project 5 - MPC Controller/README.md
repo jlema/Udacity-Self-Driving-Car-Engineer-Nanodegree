@@ -39,10 +39,12 @@ The vehicle model I used is almost the same as provided in the [lecture](https:/
 After many iterations, the following values were chosen for timestep length and elapsed duration:
 * N = 15
 * dt = 0.15
+
 These values enabled for a prediction calculation of 15 x 0.15 = 2.25 seconds into the future, which allowed a good balance of computations needed (higher N means more computations per prediction cycle.) Also in my particular PC setup, this enabled the green line to stay a small distance ahead of the yellow line which resulted in earlier and more 'accurate' reactions to track features like tight turns.
 Other values tried:
 * N = 25, 30, 40
 * dt = 0.05, 0.1, 0.5
+
 Higher N values would create unpredictability in the driving reactions which would end in the car driving off the road. Lower or higher values of dt did not seem to work well with the required latency of 100 ms. Because the actuators only trigger after 100 ms we need to ensure the actuator inputs are calculated at the right time.
 
 ## Polynomial Fitting and MPC Preprocessing
