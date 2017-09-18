@@ -106,6 +106,8 @@ int main()
           double py = j[1]["y"];
           double psi = j[1]["psi"];
           double v = j[1]["speed"];
+          double delta = j[1]["steering_angle"];
+          double a = j[1]["throttle"];
 
           // shift values to car reference
           // NOTE: shifting code referenced from Q&A session
@@ -123,11 +125,19 @@ int main()
           Eigen::VectorXd ptsx_transform = Eigen::VectorXd::Map(ptsx.data(), ptsx.size());
           Eigen::VectorXd ptsy_transform = Eigen::VectorXd::Map(ptsy.data(), ptsy.size());
           auto coeffs = polyfit(ptsx_transform, ptsy_transform, 3);
-          double cte = polyeval(coeffs, 0); // In vehicle coordinates cte is the intercept at x = 0 (instead of at x and subtracting y)
-          double epsi = -atan(coeffs[1]);   // psi and px are zero after the shifts above
+          // Calculate state after a latency of 100ms (0.1)
+          // To account for actuator latency before sending to MPC solver
+          const double latency = 0.1;
+          const double Lf = 2.67;
+          double l_px = v * latency;                                      // px is zero and psi is zero after shifts above, so this gets reduced to v * latency
+          double l_py = 0;                                                // py is zero and psi is zero after shifts above, so this gets reduced to 0
+          double l_psi = -v / Lf * delta * latency;                       // psi is zero after the shifts above, so this gets reduced to -v / Lf * delta * latency
+          double l_v = v + a * latency;                                   // velocity increases a bit during the latency period
+          double l_epsi = -atan(coeffs[1]);                               // psi is zero after the shifts above, so this gets reduced to -atan(coeffs[1])
+          double l_cte = polyeval(coeffs, 0) + v * sin(l_epsi) * latency; // py is zero after the shifts above, so this gets reduced to polyeval(coeffs, 0) + v * sin(epsi) * latency;
 
           Eigen::VectorXd state(6);
-          state << 0, 0, 0, v, cte, epsi; // px, py and psi are all zero after shifts above
+          state << l_px, l_py, l_psi, l_v, l_cte, l_epsi; // updated all state quantities to account for latency
           auto vars = mpc.Solve(state, coeffs);
 
           //Display the waypoints/reference line

@@ -25,7 +25,7 @@ const double Lf = 2.67;
 // Penalize system for not maintaining these
 double ref_cte = 0;
 double ref_epsi = 0;
-double ref_v = 60; // standard highway max velocity
+double ref_v = 70; // increased to 70 mph from previous 60 mph limit
 
 // The solver takes all the state variables and actuator
 // variables in a singular vector. Thus, we should to establish
